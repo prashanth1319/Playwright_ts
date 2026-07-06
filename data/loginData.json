@@ -1,0 +1,35 @@
+[
+  {
+    "scenario": "Valid standard user login",
+    "username": "standard_user",
+    "password": "secret_sauce",
+    "expected": "success"
+  },
+  {
+    "scenario": "Locked out user cannot login",
+    "username": "locked_out_user",
+    "password": "secret_sauce",
+    "expected": "error",
+    "expectedMessage": "Sorry, this user has been locked out."
+  },
+  {
+    "scenario": "Invalid password shows error",
+    "username": "standard_user",
+    "password": "wrong_password",
+    "expected": "error",
+    "expectedMessage": "Username and password do not match"
+  },
+  {
+    "scenario": "Problem user login (known UI bug user)",
+    "username": "problem_user",
+    "password": "secret_sauce",
+    "expected": "success"
+  },
+  {
+    "scenario": "Empty credentials show validation error",
+    "username": "",
+    "password": "",
+    "expected": "error",
+    "expectedMessage": "Username is required"
+  }
+]

@@ -1,0 +1,25 @@
+[
+  {
+    "scenario": "Checkout with complete valid info",
+    "firstName": "John",
+    "lastName": "Doe",
+    "postalCode": "10001",
+    "expected": "success"
+  },
+  {
+    "scenario": "Checkout missing last name",
+    "firstName": "Jane",
+    "lastName": "",
+    "postalCode": "94016",
+    "expected": "error",
+    "expectedMessage": "Last Name is required"
+  },
+  {
+    "scenario": "Checkout missing postal code",
+    "firstName": "Alex",
+    "lastName": "Smith",
+    "postalCode": "",
+    "expected": "error",
+    "expectedMessage": "Postal Code is required"
+  }
+]

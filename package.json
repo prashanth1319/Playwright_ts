@@ -1,0 +1,33 @@
+{
+  "name": "playwright-pom-datadriven-framework-ts",
+  "version": "1.0.0",
+  "description": "Playwright + TypeScript E2E framework using Page Object Model (POM) and Data-Driven testing, with Jenkins & GitHub Actions CI/CD and email reporting",
+  "main": "index.ts",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:headed": "npx playwright test --headed",
+    "test:chromium": "npx playwright test --project=chromium",
+    "test:firefox": "npx playwright test --project=firefox",
+    "test:webkit": "npx playwright test --project=webkit",
+    "test:debug": "npx playwright test --debug",
+    "test:ui": "npx playwright test --ui",
+    "report:show": "npx playwright show-report",
+    "report:send": "ts-node utils/sendEmailReport.ts",
+    "typecheck": "tsc --noEmit",
+    "install:browsers": "npx playwright install --with-deps"
+  },
+  "keywords": ["playwright", "typescript", "pom", "data-driven", "jenkins", "github-actions", "e2e"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.48.0",
+    "@types/node": "^20.14.0",
+    "@types/nodemailer": "^6.4.15",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "nodemailer": "^6.9.15"
+  }
+}
