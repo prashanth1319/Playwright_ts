@@ -1,7 +1,15 @@
 import { defineConfig, devices } from '@playwright/test';
-import * as dotenv from 'dotenv';
 
-dotenv.config();
+function loadDotenv() {
+  try {
+    require('dotenv').config();
+  } catch (error) {
+    // Ignore missing dotenv during editor diagnostics or in environments
+    // that do not use the workspace node_modules tree.
+  }
+}
+
+loadDotenv();
 
 export default defineConfig({
   testDir: './tests',
