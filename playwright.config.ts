@@ -24,6 +24,7 @@ export default defineConfig({
   // json for programmatic parsing, junit for Jenkins test result trend graphs
   reporter: [
     ['list'],
+    ['allure-playwright', { outputFolder: 'allure-results' }],
     ['html', { outputFolder: 'playwright-report', open: 'never' }],
     ['json', { outputFile: 'test-results/results.json' }],
     ['junit', { outputFile: 'test-results/junit-results.xml' }],

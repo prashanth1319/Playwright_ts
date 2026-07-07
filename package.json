@@ -12,17 +12,29 @@
     "test:debug": "npx playwright test --debug",
     "test:ui": "npx playwright test --ui",
     "report:show": "npx playwright show-report",
+    "allure:generate": "npx allure generate allure-results --clean -o allure-report",
+    "allure:serve": "npx allure serve allure-results",
     "report:send": "ts-node utils/sendEmailReport.ts",
     "typecheck": "tsc --noEmit",
     "install:browsers": "npx playwright install --with-deps"
   },
-  "keywords": ["playwright", "typescript", "pom", "data-driven", "jenkins", "github-actions", "e2e"],
+  "keywords": [
+    "playwright",
+    "typescript",
+    "pom",
+    "data-driven",
+    "jenkins",
+    "github-actions",
+    "e2e"
+  ],
   "author": "",
   "license": "MIT",
   "devDependencies": {
     "@playwright/test": "^1.48.0",
     "@types/node": "^20.14.0",
     "@types/nodemailer": "^6.4.15",
+    "allure-commandline": "^2.43.0",
+    "allure-playwright": "^3.10.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4"
   },

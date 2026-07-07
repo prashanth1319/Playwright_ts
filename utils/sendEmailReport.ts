@@ -122,6 +122,27 @@ async function sendEmail(): Promise<void> {
     attachments.push({ filename: 'playwright-report.zip', path: zipPath });
   }
 
+  // Attach Allure report (zipped) if present
+  const allureReportDir = path.join(__dirname, '..', 'allure-report');
+  const allureZip = path.join(__dirname, '..', 'allure-report.zip');
+  if (fs.existsSync(allureReportDir)) {
+    // Zip the allure-report directory if a zip is not already present
+    if (!fs.existsSync(allureZip)) {
+      const archiver = require('child_process').execSync;
+      try {
+        archiver(`zip -r ${allureZip} ${path.basename(allureReportDir)}`, {
+          cwd: path.join(__dirname, '..'),
+          stdio: 'ignore',
+        });
+      } catch (err) {
+        // ignore zip errors
+      }
+    }
+    if (fs.existsSync(allureZip)) {
+      attachments.push({ filename: 'allure-report.zip', path: allureZip });
+    }
+  }
+
   const subjectStatus = summary.failed > 0 ? 'FAILED' : 'PASSED';
 
   await transporter.sendMail({
