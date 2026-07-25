@@ -131,7 +131,7 @@ A second workflow, `.github/workflows/update-readme.yml`, runs on every push and
    - Runs `tsc --noEmit` as a type-check gate
    - Runs all tests (`continue-on-error` so later steps still run on failure)
    - Generates the Allure report when `allure-results/` exists
-   - Uploads the Allure report artifact, Playwright HTML report artifact, and Extent-style report artifact
+   - Uploads the Allure report artifact, Playwright HTML report artifact, and Extent-style report artifact 
    - Downloads the report artifacts in the Pages deployment job
    - Prepares a `pages-site` folder containing `playwright-report/` and `extent-report/`
    - Uploads `pages-site` as a GitHub Pages artifact and deploys it using `actions/deploy-pages`
