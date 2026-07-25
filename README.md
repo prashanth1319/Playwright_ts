@@ -9,6 +9,31 @@ Sample application under test: [saucedemo.com](https://www.saucedemo.com) — a 
 
 ## 1. Project Structure
 
+<!-- README-AUTO-GENERATED:START -->
+## Auto-generated project snapshot
+
+- Test files: 4
+- Total test cases: 8
+- Page objects: 4
+- Data files: 2
+
+### Test files
+- tests/cart.spec.ts
+- tests/dataDrivenLogin.spec.ts
+- tests/inventory.spec.ts
+- tests/login.spec.ts
+
+### Page objects
+- pages/BasePage.ts
+- pages/CartPage.ts
+- pages/InventoryPage.ts
+- pages/LoginPage.ts
+
+### Data files
+- data/checkoutData.json
+- data/loginData.json
+<!-- README-AUTO-GENERATED:END -->
+
 ```
 playwright-framework-ts/
 ├── .github/workflows/playwright.yml   # GitHub Actions CI pipeline

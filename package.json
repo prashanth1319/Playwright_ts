@@ -4,8 +4,10 @@
   "description": "Playwright + TypeScript E2E framework using Page Object Model (POM) and Data-Driven testing, with Jenkins & GitHub Actions CI/CD and email reporting",
   "main": "index.ts",
   "scripts": {
+    "pretest": "node scripts/update-readme.js",
     "test": "npx playwright test",
     "test:headed": "npx playwright test --headed",
+    "readme:update": "node scripts/update-readme.js",
     "test:chromium": "npx playwright test --project=chromium",
     "test:firefox": "npx playwright test --project=firefox",
     "test:webkit": "npx playwright test --project=webkit",
