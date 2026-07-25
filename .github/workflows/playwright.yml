@@ -46,6 +46,14 @@ jobs:
             zip -r playwright-report.zip playwright-report
           fi
 
+      - name: Upload HTML report zip artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-zip
+          path: playwright-report.zip
+          retention-days: 14
+
       - name: Generate Allure report
         if: always()
         run: |
@@ -91,6 +99,13 @@ jobs:
           path: extent-report/
           retention-days: 14
 
+      - name: Upload Extent report zip artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: extent-report-zip
+          path: extent-report.zip
+          retention-days: 14
 
       - name: Fail job if tests failed
         if: steps.run_tests.outcome == 'failure'
@@ -118,6 +133,18 @@ jobs:
         with:
           name: extent-report
           path: extent-report
+
+      - name: Download HTML report zip artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: playwright-report-zip
+          path: .
+
+      - name: Download Extent report zip artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: extent-report-zip
+          path: .
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
