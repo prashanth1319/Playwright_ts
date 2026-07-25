@@ -119,6 +119,8 @@ That's 4 spec files / 10+ individual test cases in total, easily extendable by e
 
 Workflow file: `.github/workflows/playwright.yml`. Triggers on push/PR to `main`/`master`, and can also be run manually.
 
+A second workflow, `.github/workflows/update-readme.yml`, runs on every push and automatically regenerates the README snapshot section. If the README changes, it commits the update back to the same branch.
+
 **Setup:**
 1. Push this repo to GitHub.
 2. Go to **Settings > Secrets and variables > Actions** and add these repository secrets:
