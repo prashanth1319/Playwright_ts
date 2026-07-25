@@ -76,6 +76,21 @@ jobs:
           path: playwright-report/
           retention-days: 14
 
+      - name: Zip Extent-style report
+        if: always()
+        run: |
+          if [ -d "extent-report" ]; then
+            zip -r extent-report.zip extent-report
+          fi
+
+      - name: Upload Extent-style report artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: extent-report
+          path: extent-report/
+          retention-days: 14
+
       # Sends the report by email regardless of pass/fail, so the team is
       # always notified. Configure the SMTP_* secrets in repo Settings > Secrets.
       - name: Send email with test report
@@ -95,8 +110,9 @@ jobs:
             <p><b>Branch:</b> ${{ github.ref_name }}</p>
             <p><b>Commit:</b> ${{ github.sha }}</p>
             <p><b>Triggered by:</b> ${{ github.actor }}</p>
-            <p>The Allure report and HTML report are uploaded as workflow artifacts.</p>
+            <p>The HTML report and Extent report are attached. The Allure report is available as a workflow artifact.</p>
             <p><a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}">View GitHub Actions Run</a></p>
+          attachments: playwright-report.zip,extent-report.zip
 
       - name: Fail job if tests failed
         if: steps.run_tests.outcome == 'failure'
