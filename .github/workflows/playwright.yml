@@ -7,7 +7,7 @@ on:
     branches: [main, master]
   workflow_dispatch: 
   schedule: 
-    - cron: '10 21 * * *'
+    - cron: '0 22 * * *'
 
 jobs:
   test:
@@ -15,9 +15,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout repository1
         uses: actions/checkout@v7.0.1
 
+      - name: Print event
+        run: echo ${{ github.event_name }}
       - name: Setup Node.js
         uses: actions/setup-node@v7.0.0
         with:
