@@ -119,7 +119,7 @@ jobs:
         uses: actions/configure-pages@v4
 
       - name: Upload Pages asset
-        uses: actions/upload-pages-asset@v1
+        uses: actions/upload-pages-artifact@v1
         with:
           path: extent-report
 
