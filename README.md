@@ -128,10 +128,14 @@ Workflow file: `.github/workflows/playwright.yml`. Triggers on push/PR to `main`
    - Installs dependencies & browsers
    - Runs `tsc --noEmit` as a type-check gate
    - Runs all tests (`continue-on-error` so later steps still run on failure)
-   - Zips the HTML report and the Extent-style report
-   - Uploads the HTML report and `extent-report/` as build artifacts
-   - Deploys the Extent report to GitHub Pages
-   - **Emails the report** (pass or fail) using [`dawidd6/action-send-mail`](https://github.com/dawidd6/action-send-mail), with a direct link to the hosted Extent report and attachments for the HTML and Extent zips
+   - Generates the Allure report when `allure-results/` exists
+   - Uploads the Allure report artifact, Playwright HTML report artifact, and Extent-style report artifact
+   - Downloads the report artifacts in the Pages deployment job
+   - Prepares a `pages-site` folder containing `playwright-report/` and `extent-report/`
+   - Uploads `pages-site` as a GitHub Pages artifact and deploys it using `actions/deploy-pages`
+   - **Emails the report** with direct GitHub Pages links to:
+     - `playwright-report/index.html`
+     - `extent-report/index.html`
    - Finally fails the job if tests failed, so PR checks reflect the real result
 
 > Gmail users: create an **App Password** (not your regular password) for `SMTP_PASS`, and use `smtp.gmail.com` / port `587`.
