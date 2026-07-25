@@ -104,18 +104,33 @@ jobs:
           path: extent-report
 
       - name: Configure GitHub Pages
-        uses: actions/configure-pages@v6.0.0
+        uses: actions/configure-pages@v6
+
+      - name: Prepare Pages deployment contents
+        run: |
+          rm -rf pages-site
+          mkdir -p pages-site
+          if [ -d "playwright-report" ]; then
+            cp -R playwright-report pages-site/
+          fi
+          if [ -d "extent-report" ]; then
+            cp -R extent-report pages-site/
+          fi
+          if [ ! -d "pages-site/playwright-report" ] && [ ! -d "pages-site/extent-report" ]; then
+            echo "No report directories found after download" >&2
+            exit 1
+          fi
+          echo "Pages deployment contents:"
+          find pages-site -maxdepth 2 -type d
 
       - name: Upload Pages asset
         uses: actions/upload-pages-artifact@v3
         with:
-          path: |
-            playwright-report
-            extent-report
+          path: pages-site
 
       - name: Deploy to GitHub Pages
         id: deploy-pages
-        uses: actions/deploy-pages@v5.0.0
+        uses: actions/deploy-pages@v5
 
       - name: Send email with direct HTML report links
         uses: dawidd6/action-send-mail@v3
