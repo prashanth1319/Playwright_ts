@@ -3,7 +3,7 @@
  *
  * Sends the Playwright test results via email using Nodemailer + SMTP.
  * Reads test-results/results.json (produced by the "json" reporter) to build
- * a summary in the email body, and attaches the JUnit XML plus the zipped
+ * a summary in the email body, and attaches the Allure report plus the zipped
  * HTML report (CI workflow zips playwright-report/ before calling this script).
  *
  * Usage:
@@ -91,7 +91,7 @@ function buildSummary(): Summary {
       <tr><td style="color:#d93025;"><b>Failed</b></td><td>${failed}</td></tr>
       <tr><td style="color:#e8710a;"><b>Skipped</b></td><td>${skipped}</td></tr>
     </table>
-    <p>Full HTML report and JUnit XML are attached / linked in the CI build.</p>
+    <p>Allure report and HTML report are attached / linked in the CI build.</p>
   `;
 
   return { html, passed, failed, skipped, total };
@@ -111,11 +111,6 @@ async function sendEmail(): Promise<void> {
   });
 
   const attachments: { filename: string; path: string }[] = [];
-
-  const junitPath = path.join(__dirname, '..', 'test-results', 'junit-results.xml');
-  if (fs.existsSync(junitPath)) {
-    attachments.push({ filename: 'junit-results.xml', path: junitPath });
-  }
 
   const zipPath = path.join(__dirname, '..', 'playwright-report.zip');
   if (fs.existsSync(zipPath)) {

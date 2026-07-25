@@ -53,6 +53,13 @@ jobs:
             npx allure generate allure-results --clean -o allure-report || true
           fi
 
+      - name: Zip Allure report
+        if: always()
+        run: |
+          if [ -d "allure-report" ]; then
+            zip -r allure-report.zip allure-report
+          fi
+
       - name: Upload Allure report artifact
         if: always()
         uses: actions/upload-artifact@v4
@@ -67,14 +74,6 @@ jobs:
         with:
           name: playwright-html-report
           path: playwright-report/
-          retention-days: 14
-
-      - name: Upload JUnit results artifact
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: junit-results
-          path: test-results/junit-results.xml
           retention-days: 14
 
       # Sends the report by email regardless of pass/fail, so the team is
@@ -96,9 +95,9 @@ jobs:
             <p><b>Branch:</b> ${{ github.ref_name }}</p>
             <p><b>Commit:</b> ${{ github.sha }}</p>
             <p><b>Triggered by:</b> ${{ github.actor }}</p>
-            <p>See attached HTML report and JUnit XML, or view the full run:</p>
+            <p>See attached Allure report and HTML report, or view the full run:</p>
             <p><a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}">View GitHub Actions Run</a></p>
-          attachments: playwright-report.zip,test-results/junit-results.xml
+          attachments: allure-report.zip,playwright-report.zip
 
       - name: Fail job if tests failed
         if: steps.run_tests.outcome == 'failure'
