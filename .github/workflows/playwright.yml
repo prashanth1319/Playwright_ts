@@ -39,33 +39,11 @@ jobs:
         continue-on-error: true
         id: run_tests
 
-      - name: Zip HTML report
-        if: always()
-        run: |
-          if [ -d "playwright-report" ]; then
-            zip -r playwright-report.zip playwright-report
-          fi
-
-      - name: Upload HTML report zip artifact
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-report-zip
-          path: playwright-report.zip
-          retention-days: 14
-
       - name: Generate Allure report
         if: always()
         run: |
           if [ -d "allure-results" ]; then
             npx allure generate allure-results --clean -o allure-report || true
-          fi
-
-      - name: Zip Allure report
-        if: always()
-        run: |
-          if [ -d "allure-report" ]; then
-            zip -r allure-report.zip allure-report
           fi
 
       - name: Upload Allure report artifact
@@ -84,12 +62,13 @@ jobs:
           path: playwright-report/
           retention-days: 14
 
-      - name: Zip Extent-style report
+      - name: Upload HTML report artifact
         if: always()
-        run: |
-          if [ -d "extent-report" ]; then
-            zip -r extent-report.zip extent-report
-          fi
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-html-report
+          path: playwright-report/
+          retention-days: 14
 
       - name: Upload Extent-style report artifact
         if: always()
@@ -97,14 +76,6 @@ jobs:
         with:
           name: extent-report
           path: extent-report/
-          retention-days: 14
-
-      - name: Upload Extent report zip artifact
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: extent-report-zip
-          path: extent-report.zip
           retention-days: 14
 
       - name: Fail job if tests failed
@@ -128,23 +99,17 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Download HTML report artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: playwright-html-report
+          path: playwright-report
+
       - name: Download Extent report artifact
         uses: actions/download-artifact@v4
         with:
           name: extent-report
           path: extent-report
-
-      - name: Download HTML report zip artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: playwright-report-zip
-          path: .
-
-      - name: Download Extent report zip artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: extent-report-zip
-          path: .
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
@@ -152,13 +117,15 @@ jobs:
       - name: Upload Pages asset
         uses: actions/upload-pages-artifact@v3
         with:
-          path: extent-report
+          path: |
+            playwright-report
+            extent-report
 
       - name: Deploy to GitHub Pages
         id: deploy-pages
         uses: actions/deploy-pages@v4
 
-      - name: Send email with direct Extent report link
+      - name: Send email with direct HTML report links
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: ${{ secrets.SMTP_HOST }}
@@ -174,7 +141,8 @@ jobs:
             <p><b>Branch:</b> ${{ github.ref_name }}</p>
             <p><b>Commit:</b> ${{ github.sha }}</p>
             <p><b>Triggered by:</b> ${{ github.actor }}</p>
+            <p>The Playwright HTML report is available here:</p>
+            <p><a href="${{ steps.deploy-pages.outputs.page_url }}/playwright-report/index.html">Open Playwright HTML Report</a></p>
             <p>The Extent report is available here:</p>
-            <p><a href="${{ steps.deploy-pages.outputs.page_url }}">Open Extent Report</a></p>
+            <p><a href="${{ steps.deploy-pages.outputs.page_url }}/extent-report/index.html">Open Extent Report</a></p>
             <p><a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}">View GitHub Actions Run</a></p>
-          attachments: playwright-report.zip,extent-report.zip
