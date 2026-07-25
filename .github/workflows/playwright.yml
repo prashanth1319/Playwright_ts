@@ -91,29 +91,59 @@ jobs:
           path: extent-report/
           retention-days: 14
 
-      # Sends the report by email regardless of pass/fail, so the team is
-      # always notified. Configure the SMTP_* secrets in repo Settings > Secrets.
-      - name: Send email with test report
-        if: always()
+
+      - name: Fail job if tests failed
+        if: steps.run_tests.outcome == 'failure'
+        run: exit 1
+
+  deploy-pages:
+    needs: test
+    if: always()
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download Extent report artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: extent-report
+          path: extent-report
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload Pages asset
+        uses: actions/upload-pages-asset@v1
+        with:
+          path: extent-report
+
+      - name: Deploy to GitHub Pages
+        id: deploy-pages
+        uses: actions/deploy-pages@v1
+
+      - name: Send email with direct Extent report link
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: ${{ secrets.SMTP_HOST }}
           server_port: ${{ secrets.SMTP_PORT }}
           username: ${{ secrets.SMTP_USER }}
           password: ${{ secrets.SMTP_PASS }}
-          subject: "Playwright Test Report - ${{ job.status }} - ${{ github.repository }}"
+          subject: "Playwright Test Report - ${{ needs.test.result }} - ${{ github.repository }}"
           to: ${{ secrets.EMAIL_TO }}
           from: ${{ secrets.EMAIL_FROM }}
           html_body: |
-            <h2>Playwright Test Run: ${{ job.status }}</h2>
+            <h2>Playwright Test Run: ${{ needs.test.result }}</h2>
             <p><b>Repository:</b> ${{ github.repository }}</p>
             <p><b>Branch:</b> ${{ github.ref_name }}</p>
             <p><b>Commit:</b> ${{ github.sha }}</p>
             <p><b>Triggered by:</b> ${{ github.actor }}</p>
-            <p>The HTML report and Extent report are attached. The Allure report is available as a workflow artifact.</p>
+            <p>The Extent report is available here:</p>
+            <p><a href="${{ steps.deploy-pages.outputs.page_url }}">Open Extent Report</a></p>
             <p><a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}">View GitHub Actions Run</a></p>
           attachments: playwright-report.zip,extent-report.zip
-
-      - name: Fail job if tests failed
-        if: steps.run_tests.outcome == 'failure'
-        run: exit 1

@@ -55,9 +55,11 @@ playwright-framework-ts/
 │   ├── dataDrivenLogin.spec.ts        # Data-driven test (loops over JSON)
 │   ├── inventory.spec.ts              # Cart badge / sorting tests
 │   └── cart.spec.ts                   # Full checkout E2E + data-driven checkout
+├── reporters/
+│   └── extent-reporter.js             # Custom Extent-style Playwright reporter
 ├── utils/
 │   └── sendEmailReport.ts             # Nodemailer-based report emailer
-├── playwright.config.ts               # Reporters: list, html, json, junit
+├── playwright.config.ts               # Reporters: list, allure, html, json, junit, extent
 ├── tsconfig.json
 ├── package.json
 ├── .env.example
@@ -87,10 +89,14 @@ Run tests:
 npm test                    # headless, all browsers
 npm run test:headed         # headed mode
 npm run test:chromium       # single browser
+npm run test:webkit         # WebKit browser
 npm run test:ui             # Playwright UI mode (interactive)
 npm run typecheck           # tsc --noEmit, verifies types with no test run
 npm run report:show         # open the last HTML report
 ```
+
+The Extent-style report is generated into `extent-report/index.html`.
+After a test run, open that file in your browser to view the Extent report UI.
 
 Send the report by email locally (after a test run):
 
@@ -122,9 +128,10 @@ Workflow file: `.github/workflows/playwright.yml`. Triggers on push/PR to `main`
    - Installs dependencies & browsers
    - Runs `tsc --noEmit` as a type-check gate
    - Runs all tests (`continue-on-error` so later steps still run on failure)
-   - Zips the HTML report
-   - Uploads the HTML report and JUnit XML as build artifacts
-   - **Emails the report** (pass or fail) using [`dawidd6/action-send-mail`](https://github.com/dawidd6/action-send-mail), with the zipped report and JUnit XML attached
+   - Zips the HTML report and the Extent-style report
+   - Uploads the HTML report and `extent-report/` as build artifacts
+   - Deploys the Extent report to GitHub Pages
+   - **Emails the report** (pass or fail) using [`dawidd6/action-send-mail`](https://github.com/dawidd6/action-send-mail), with a direct link to the hosted Extent report and attachments for the HTML and Extent zips
    - Finally fails the job if tests failed, so PR checks reflect the real result
 
 > Gmail users: create an **App Password** (not your regular password) for `SMTP_PASS`, and use `smtp.gmail.com` / port `587`.
@@ -145,8 +152,8 @@ File: `Jenkinsfile` (declarative pipeline).
 3. In `post { always { ... } }`:
    - Publishes JUnit results (pass/fail trend graph in Jenkins UI)
    - Publishes the HTML report as a Jenkins tab (via `publishHTML`)
-   - Archives `playwright-report.zip` and `test-results/**` as build artifacts
-   - Sends an **email** (`emailext`) with the HTML report zip + JUnit XML attached to the default recipients, on every build regardless of outcome
+   - Archives `playwright-report.zip`, `extent-report.zip`, and `test-results/**` as build artifacts
+   - Sends an **email** (`emailext`) with the HTML report zip + Extent report zip attached to the default recipients, on every build regardless of outcome
    - Marks the build as `FAILURE` if the test step returned a non-zero exit code
 
 ## 7. Extending the Framework
