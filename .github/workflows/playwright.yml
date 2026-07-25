@@ -95,9 +95,8 @@ jobs:
             <p><b>Branch:</b> ${{ github.ref_name }}</p>
             <p><b>Commit:</b> ${{ github.sha }}</p>
             <p><b>Triggered by:</b> ${{ github.actor }}</p>
-            <p>See attached Allure report and HTML report, or view the full run:</p>
+            <p>The Allure report and HTML report are uploaded as workflow artifacts.</p>
             <p><a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}">View GitHub Actions Run</a></p>
-          attachments: allure-report.zip,playwright-report.zip
 
       - name: Fail job if tests failed
         if: steps.run_tests.outcome == 'failure'
