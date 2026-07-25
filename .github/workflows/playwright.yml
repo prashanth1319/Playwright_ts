@@ -7,7 +7,7 @@ on:
     branches: [main, master]
   workflow_dispatch: 
   schedule: 
-    - cron: '30 20 * * *'
+    - cron: '55 20 * * *'
 
 jobs:
   test:
