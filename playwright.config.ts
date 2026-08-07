@@ -12,7 +12,9 @@ function loadDotenv() {
 loadDotenv();
 
 export default defineConfig({
-  testDir: './tests',
+  // Root is testDir; use testMatch to include UI and API test folders
+  testDir: '.',
+  testMatch: ['UI/tests/**/*.spec.ts', 'API/**/*.spec.ts'],
   timeout: 30 * 1000,
   expect: { timeout: 5000 },
   fullyParallel: true,
