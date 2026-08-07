@@ -18,20 +18,20 @@ Sample application under test: [saucedemo.com](https://www.saucedemo.com) — a 
 - Data files: 2
 
 ### Test files
-- tests/cart.spec.ts
-- tests/dataDrivenLogin.spec.ts
-- tests/inventory.spec.ts
-- tests/login.spec.ts
+- UI/tests/cart.spec.ts
+- UI/tests/dataDrivenLogin.spec.ts
+- UI/tests/inventory.spec.ts
+- UI/tests/login.spec.ts
 
 ### Page objects
-- pages/BasePage.ts
-- pages/CartPage.ts
-- pages/InventoryPage.ts
-- pages/LoginPage.ts
+- UI/pages/BasePage.ts
+- UI/pages/CartPage.ts
+- UI/pages/InventoryPage.ts
+- UI/pages/LoginPage.ts
 
 ### Data files
-- data/checkoutData.json
-- data/loginData.json
+- UI/data/checkoutData.json
+- UI/data/loginData.json
 <!-- README-AUTO-GENERATED:END -->
 
 ```

@@ -22,9 +22,10 @@ function getFiles(dir, out = []) {
 }
 
 function updateReadme(readmePath, projectRoot = process.cwd()) {
-  const testDir = path.join(projectRoot, 'tests');
-  const pagesDir = path.join(projectRoot, 'pages');
-  const dataDir = path.join(projectRoot, 'data');
+  // Project structure places tests/pages/data under `UI/`
+  const testDir = path.join(projectRoot, 'UI', 'tests');
+  const pagesDir = path.join(projectRoot, 'UI', 'pages');
+  const dataDir = path.join(projectRoot, 'UI', 'data');
 
   const testFiles = fs.existsSync(testDir)
     ? getFiles(testDir).filter((file) => /\.spec\.(ts|js|tsx|jsx)$/.test(file))
@@ -75,7 +76,9 @@ function updateReadme(readmePath, projectRoot = process.cwd()) {
 module.exports = { updateReadme };
 
 if (require.main === module) {
-  const readmePath = path.resolve(__dirname, '..', 'README.md');
-  updateReadme(readmePath, path.resolve(__dirname, '..'));
+  // Script lives in UI/scripts; project root is two levels up
+  const projectRoot = path.resolve(__dirname, '..', '..');
+  const readmePath = path.join(projectRoot, 'README.md');
+  updateReadme(readmePath, projectRoot);
   console.log('README updated successfully.');
 }
