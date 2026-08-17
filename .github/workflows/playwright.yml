@@ -101,6 +101,12 @@ jobs:
           name: playwright-html-report
           path: playwright-report
 
+      - name: Download Allure HTML report artifact
+        uses: actions/download-artifact@v8.0.1
+        with:
+          name: allure-report
+          path: allure-report
+
       - name: Download Extent report artifact
         uses: actions/download-artifact@v4
         with:
@@ -116,6 +122,9 @@ jobs:
           mkdir -p pages-site
           if [ -d "playwright-report" ]; then
             cp -R playwright-report pages-site/
+          fi
+          if [ -d "allure-report" ]; then
+            cp -R allure-report pages-site/
           fi
           if [ -d "extent-report" ]; then
             cp -R extent-report pages-site/
@@ -154,6 +163,8 @@ jobs:
             <p><b>Triggered by:</b> ${{ github.actor }}</p>
             <p>The Playwright HTML report is available here:</p>
             <p><a href="${{ steps.deploy-pages.outputs.page_url }}/playwright-report/index.html">Open Playwright HTML Report</a></p>
+            <p>The Allure report is available here:</p>
+            <p><a href="${{ steps.deploy-pages.outputs.page_url }}/allure-report/index.html">Open Allure Report</a></p>
             <p>The Extent report is available here:</p>
             <p><a href="${{ steps.deploy-pages.outputs.page_url }}/extent-report/index.html">Open Extent Report</a></p>
             <p><a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}">View GitHub Actions Run</a></p>
