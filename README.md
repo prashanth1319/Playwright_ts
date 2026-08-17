@@ -38,6 +38,22 @@ Sample application under test: [saucedemo.com](https://www.saucedemo.com) — a 
 playwright-framework-ts/
 ├── .github/workflows/playwright.yml   # GitHub Actions CI pipeline
 ├── Jenkinsfile                        # Jenkins declarative pipeline
+
+Run tests against specific environments (dev/staging/prod):
+
+```bash
+npm run test:dev           # runs with TEST_ENV=dev and writes Allure env
+npm run test:staging       # runs with TEST_ENV=staging and writes Allure env
+npm run test:prod          # runs with TEST_ENV=prod and writes Allure env
+```
+
+Notes:
+- Each of the above scripts writes `allure-results/environment.properties` (keys: `Environment`, `BaseURL`) so the Allure report shows which environment the run targeted.
+- To override a base URL on the fly:
+
+```bash
+BASE_URL_STAGING=https://staging.myapp.com npm run test:staging
+```
 ├── config/
 │   └── env.config.ts                  # Centralized, typed env/config reader
 ├── data/
@@ -54,8 +70,8 @@ playwright-framework-ts/
 │   ├── login.spec.ts                  # Smoke tests
 │   ├── dataDrivenLogin.spec.ts        # Data-driven test (loops over JSON)
 │   ├── inventory.spec.ts              # Cart badge / sorting tests
-│   └── cart.spec.ts                   # Full checkout E2E + data-driven checkout
-├── reporters/
+      - Generates the Allure HTML report (using `npx allure generate`) when `allure-results/` exists
+      - Uploads the `allure-results/` raw results and the generated `allure-report/` HTML artifact, plus `playwright-report/` and `extent-report/` artifacts so you can download them from the Actions run summary
 │   └── extent-reporter.js             # Custom Extent-style Playwright reporter
 ├── utils/
 │   └── sendEmailReport.ts             # Nodemailer-based report emailer
