@@ -57,7 +57,17 @@ jobs:
         if: always()
         run: |
           if [ -d "allure-results" ]; then
+            echo "-- allure-results listing --"
+            ls -la allure-results || true
+            echo "-- environment.properties content --"
+            if [ -f "allure-results/environment.properties" ]; then
+              cat allure-results/environment.properties || true
+            else
+              echo "(environment.properties not found)"
+            fi
             npx allure generate allure-results --clean -o allure-report || true
+          else
+            echo "(no allure-results directory)"
           fi
 
       - name: Upload Allure report artifact
@@ -66,6 +76,14 @@ jobs:
         with:
           name: allure-report
           path: allure-report/
+          retention-days: 14
+
+      - name: Upload Allure raw results
+        if: always()
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: allure-results
+          path: allure-results/
           retention-days: 14
 
       - name: Upload HTML report artifact
