@@ -17,7 +17,7 @@ test.describe('Cart & Checkout - End to End Flow @regression', () => {
     const loginPage = new LoginPage(page);
     await loginPage.open();
     await loginPage.login('standard_user', 'secret_sauce');
-    // Added dummy line
+    // Added dummy 
   });
 
   test('full purchase flow: add item, checkout, and confirm order', async ({ page }) => {
