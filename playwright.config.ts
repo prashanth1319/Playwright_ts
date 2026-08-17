@@ -11,6 +11,11 @@ function loadDotenv() {
 
 loadDotenv();
 
+import { getAppConfig } from './config/env.config';
+
+// Resolve application config for the requested environment (TEST_ENV).
+const appConfig = getAppConfig(process.env.TEST_ENV);
+
 export default defineConfig({
   // Root is testDir; use testMatch to include UI and API test folders
   testDir: '.',
@@ -34,7 +39,7 @@ export default defineConfig({
   ],
 
   use: {
-    baseURL: process.env.BASE_URL || 'https://www.saucedemo.com',
+    baseURL: appConfig.baseUrl,
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
