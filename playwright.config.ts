@@ -35,7 +35,7 @@ export default defineConfig({
     ['html', { outputFolder: 'playwright-report', open: 'never' }],
     ['json', { outputFile: 'test-results/results.json' }],
     ['junit', { outputFile: 'test-results/junit-results.xml' }],
-    [require.resolve('./UI/reporters/extent-reporter.js'), { outputFolder: 'extent-report' }],
+    // extent reporter removed
   ],
 
   use: {

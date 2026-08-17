@@ -71,8 +71,8 @@ BASE_URL_STAGING=https://staging.myapp.com npm run test:staging
 │   ├── dataDrivenLogin.spec.ts        # Data-driven test (loops over JSON)
 │   ├── inventory.spec.ts              # Cart badge / sorting tests
       - Generates the Allure HTML report (using `npx allure generate`) when `allure-results/` exists
-      - Uploads the `allure-results/` raw results and the generated `allure-report/` HTML artifact, plus `playwright-report/` and `extent-report/` artifacts so you can download them from the Actions run summary
-│   └── extent-reporter.js             # Custom Extent-style Playwright reporter
+      - Uploads the `allure-results/` raw results and the generated `allure-report/` HTML artifact, plus `playwright-report/` artifact so you can download them from the Actions run summary
+│   └── (extent reporter removed)
 ├── utils/
 │   └── sendEmailReport.ts             # Nodemailer-based report emailer
 ├── playwright.config.ts               # Reporters: list, allure, html, json, junit, extent
@@ -111,7 +111,7 @@ npm run typecheck           # tsc --noEmit, verifies types with no test run
 npm run report:show         # open the last HTML report
 ```
 
-The Extent-style report is generated into `extent-report/index.html`.
+The Extent-style report has been removed from this project.
 After a test run, open that file in your browser to view the Extent report UI.
 
 Send the report by email locally (after a test run):
@@ -149,7 +149,7 @@ A second workflow, `.github/workflows/update-readme.yml`, runs on every push and
    - Generates the Allure report when `allure-results/` exists
    - Uploads the Allure report artifact, Playwright HTML report artifact, and Extent-style report artifact 
    - Downloads the report artifacts in the Pages deployment job
-   - Prepares a `pages-site` folder containing `playwright-report/` and `extent-report/`
+   - Prepares a `pages-site` folder containing `playwright-report/` and `allure-report/`
    - Uploads `pages-site` as a GitHub Pages artifact and deploys it using `actions/deploy-pages`
    - **Emails the report** with direct GitHub Pages links to:
      - `playwright-report/index.html`
@@ -174,7 +174,7 @@ File: `Jenkinsfile` (declarative pipeline).
 3. In `post { always { ... } }`:
    - Publishes JUnit results (pass/fail trend graph in Jenkins UI)
    - Publishes the HTML report as a Jenkins tab (via `publishHTML`)
-   - Archives `playwright-report.zip`, `extent-report.zip`, and `test-results/**` as build artifacts
+   - Archives `playwright-report.zip` and `test-results/**` as build artifacts
    - Sends an **email** (`emailext`) with the HTML report zip + Extent report zip attached to the default recipients, on every build regardless of outcome
    - Marks the build as `FAILURE` if the test step returned a non-zero exit code
 

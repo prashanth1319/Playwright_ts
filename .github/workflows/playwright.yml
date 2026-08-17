@@ -66,14 +66,6 @@ jobs:
           path: playwright-report/
           retention-days: 14
 
-      - name: Upload Extent-style report artifact
-        if: always()
-        uses: actions/upload-artifact@v7.0.1
-        with:
-          name: extent-report
-          path: extent-report/
-          retention-days: 14
-
       - name: Fail job if tests failed
         if: steps.run_tests.outcome == 'failure'
         run: exit 1
@@ -107,12 +99,6 @@ jobs:
           name: allure-report
           path: allure-report
 
-      - name: Download Extent report artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: extent-report
-          path: extent-report
-
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v6
 
@@ -126,10 +112,7 @@ jobs:
           if [ -d "allure-report" ]; then
             cp -R allure-report pages-site/
           fi
-          if [ -d "extent-report" ]; then
-            cp -R extent-report pages-site/
-          fi
-          if [ ! -d "pages-site/playwright-report" ] && [ ! -d "pages-site/extent-report" ]; then
+          if [ ! -d "pages-site/playwright-report" ] && [ ! -d "pages-site/allure-report" ]; then
             echo "No report directories found after download" >&2
             exit 1
           fi
@@ -165,6 +148,4 @@ jobs:
             <p><a href="${{ steps.deploy-pages.outputs.page_url }}/playwright-report/index.html">Open Playwright HTML Report</a></p>
             <p>The Allure report is available here:</p>
             <p><a href="${{ steps.deploy-pages.outputs.page_url }}/allure-report/index.html">Open Allure Report</a></p>
-            <p>The Extent report is available here:</p>
-            <p><a href="${{ steps.deploy-pages.outputs.page_url }}/extent-report/index.html">Open Extent Report</a></p>
             <p><a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}">View GitHub Actions Run</a></p>
